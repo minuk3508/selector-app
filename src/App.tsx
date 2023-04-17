@@ -1,144 +1,121 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, {useEffect} from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import styled from 'styled-components/native';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {StatusBar} from 'react-native';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
 const ID =
   `1054375956199-ppe58unqgn5pbrnoc9uk8a09hv8oj62a.apps.googleusercontent.com` as const;
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
 
-function App(): JSX.Element {
+export default function App(): JSX.Element {
   useEffect(() => {
     const googleSigninConfigure = () => {
       GoogleSignin.configure({
         webClientId: ID,
       });
     };
-
     googleSigninConfigure();
   }, []);
 
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-  console.log('dd');
   const onGoogleButtonPress = async () => {
     const {idToken} = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     return auth().signInWithCredential(googleCredential);
   };
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            <GoogleSigninButton
-              onPress={() =>
-                onGoogleButtonPress()
-                  .then(() => console.log('Signed in with Google!'))
-                  .catch(err => console.log(err))
-              }
-            />
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Container>
+      <StatusBar barStyle={'light-content'} />
+      <TopWrapper>
+        <TitleBox>
+          <TitleText>Selector</TitleText>
+        </TitleBox>
+      </TopWrapper>
+      <BottomWrapper>
+        <GoogleButton
+          underlayColor="#43444d"
+          onPress={() =>
+            onGoogleButtonPress()
+              .then(() => console.log('Signed in with Google!'))
+              .catch(err => console.log(err))
+          }>
+          <ButtonWrapper>
+            <IconBox>
+              <IconText>
+                <Icon name="googleplus" color={'white'} size={35} />
+              </IconText>
+            </IconBox>
+            <TextBox>
+              <ButtonText>Google Sign in</ButtonText>
+            </TextBox>
+          </ButtonWrapper>
+        </GoogleButton>
+      </BottomWrapper>
+    </Container>
   );
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+const TitleBox = styled.View`
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 120px;
+`;
+const TitleText = styled.Text`
+  color: #d5d5d5;
+  font-weight: 900;
+  font-size: 65px;
+`;
+const TopWrapper = styled.View`
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50%;
+`;
+const BottomWrapper = styled.View`
+  align-items: center;
+  width: 100%;
+  height: 50%;
+`;
+const Container = styled.SafeAreaView`
+  width: 100%;
+  height: 100%;
+  padding-top: ${getStatusBarHeight()};
+  background-color: #252525;
+`;
+const GoogleButton = styled.TouchableHighlight`
+  justify-content: center;
+  align-items: center;
+  width: 220px;
+  height: 45px;
+  border-radius: 10px;
+  background-color: #32353d;
+`;
+const ButtonWrapper = styled.View`
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+`;
+const IconBox = styled.View`
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  height: 100%;
+  border-radius: 10px;
+`;
+const TextBox = styled.View`
+  justify-content: center;
+  width: 70%;
+  height: 100%;
+`;
+const IconText = styled.Text`
+  color: whitesmoke;
+  font-weight: 700;
+  font-size: 19px;
+`;
+const ButtonText = styled.Text`
+  color: #b1b1b1;
+  font-weight: 700;
+  font-size: 19px;
+`;

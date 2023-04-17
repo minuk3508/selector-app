@@ -10,7 +10,8 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "types": ["@types/styled-components-react-native"]
   },
   "exclude": [
     "node_modules",

@@ -25,6 +25,7 @@ target 'Selector' do
   config = use_native_modules!
   pod 'FirebaseCore', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   # Flags change depending on the env values.
   flags = get_default_flags()
 
