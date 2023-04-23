@@ -1,12 +1,48 @@
 import React, {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
-import {StatusBar} from 'react-native';
+import {Platform, StatusBar, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import RemainingTime from './components/remainingTime';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {addUser, getUser} from '../api/user';
 
 export default function Home(): JSX.Element {
+  const [onSetting, setOnSetting] = useState(false);
+  const [user, setUser] = useState<{
+    uid: string;
+    name: string | null;
+    birth: string | null;
+    email: string | null;
+    phone: string | null;
+    account: object | null;
+  }>();
+  const init = async () => {
+    const currentUser = auth().currentUser?.uid;
+    const currentUserName = auth().currentUser?.displayName;
+    const currentUserEmail = auth().currentUser?.email;
+    if (currentUser) {
+      const user = await getUser({uid: currentUser});
+      if (user === '') {
+        await addUser({
+          uid: currentUser,
+          name: currentUserName ? currentUserName : null,
+          birth: null,
+          email: currentUserEmail ? currentUserEmail : null,
+          phone: null,
+          account: null,
+        }).then(() => {
+          const newUser = getUser({uid: currentUser});
+          console.log(newUser);
+        });
+      }
+      setUser(user);
+    }
+  };
+  useEffect(() => {
+    init();
+  }, []);
+
   return (
     <Container>
       <StatusBar barStyle={'light-content'} />
@@ -14,9 +50,26 @@ export default function Home(): JSX.Element {
         <TitleBox>
           <TitleText>Selector</TitleText>
         </TitleBox>
-        <SettingButton>
-          <Icon name="settings-sharp" color={'#5f5f5f'} size={23} />
-        </SettingButton>
+        <ButtonWrapper>
+          <SettingButton
+            onPress={() => {
+              setOnSetting(prev => !prev);
+            }}>
+            <Icon name="settings-sharp" color={'#5f5f5f'} size={23} />
+          </SettingButton>
+          {onSetting ? (
+            <Menu style={boxShdowStyles.shadow}>
+              <MenuItem>
+                <MenuButton
+                  onPress={() => {
+                    auth().signOut();
+                  }}>
+                  <MenuButtonText>로그아웃</MenuButtonText>
+                </MenuButton>
+              </MenuItem>
+            </Menu>
+          ) : null}
+        </ButtonWrapper>
       </HeaderWrapper>
       <MainWrapper>
         <RemainingTime />
@@ -52,9 +105,7 @@ export default function Home(): JSX.Element {
           </BoxMain>
           <BoxSub>
             <TextBox>
-              <RemainText>{`👤 ${
-                auth().currentUser?.displayName ? auth().currentUser?.displayName : '사용자'
-              }님이 보유한 티켓은`}</RemainText>
+              <RemainText>{`👤 ${user?.name ? user?.name : '사용자'}님이 보유한 티켓은`}</RemainText>
             </TextBox>
           </BoxSub>
           <BoxMain>
@@ -97,7 +148,55 @@ export default function Home(): JSX.Element {
     </Container>
   );
 }
+const boxShdowStyles = StyleSheet.create({
+  shadow: {
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 10,
+          height: 10,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
+  },
+});
+const MenuItem = styled.View`
+  width: 100%;
+  height: 25px;
+`;
+const MenuButtonText = styled.Text`
+  color: white;
+  font-weight: 900;
+  font-size: 12px;
+`;
+const MenuButton = styled.TouchableOpacity`
+  display: flex;
+  justify-content: center;
 
+  width: 100%;
+  height: 100%;
+`;
+const Menu = styled.View`
+  position: absolute;
+  top: 100%;
+  right: 0px;
+  width: 200px;
+  height: auto;
+  padding: 10px 20px;
+  background-color: #2d2c34;
+  border-radius: 8px;
+  z-index: 3;
+`;
+const ButtonWrapper = styled.View`
+  position: relative;
+  z-index: 2;
+`;
 const SettingButton = styled.TouchableOpacity`
   display: flex;
   justify-content: center;
@@ -143,12 +242,14 @@ const GetTicketButton = styled.TouchableOpacity`
   border-radius: 10px;
 `;
 const Container = styled.SafeAreaView`
+  position: relative;
   width: 100%;
   height: 100%;
   padding-top: ${getStatusBarHeight()};
   background-color: #252525;
 `;
 const HeaderWrapper = styled.View`
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -158,6 +259,7 @@ const HeaderWrapper = styled.View`
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 3px;
+  z-index: 3;
 `;
 const MainWrapper = styled.ScrollView`
   width: 100%;
