@@ -9,6 +9,7 @@ import {addUser, getUser} from '../api/user';
 
 export default function Home(): JSX.Element {
   const [onSetting, setOnSetting] = useState(false);
+
   const [user, setUser] = useState<{
     uid: string;
     name: string | null;
@@ -17,6 +18,7 @@ export default function Home(): JSX.Element {
     phone: string | null;
     account: object | null;
   }>();
+
   const init = async () => {
     const currentUser = auth().currentUser?.uid;
     const currentUserName = auth().currentUser?.displayName;
@@ -39,8 +41,10 @@ export default function Home(): JSX.Element {
       setUser(user);
     }
   };
+
   useEffect(() => {
-    init();
+    init().then(() => console.log('-----> home mounting'));
+    return;
   }, []);
 
   return (
@@ -91,7 +95,9 @@ export default function Home(): JSX.Element {
         </Box>
         <Box>
           <BoxHeader>
-            <BoxTitle>📍 티켓이 뽑히면 그날 발행된 티켓은 리셋🔄됩니다. </BoxTitle>
+            <BoxTitle>
+              📍 티켓이 뽑히면 그날 발행된 티켓은 리셋🔄됩니다.{' '}
+            </BoxTitle>
           </BoxHeader>
           <BoxSub>
             <TextBox>
@@ -105,7 +111,9 @@ export default function Home(): JSX.Element {
           </BoxMain>
           <BoxSub>
             <TextBox>
-              <RemainText>{`👤 ${user?.name ? user?.name : '사용자'}님이 보유한 티켓은`}</RemainText>
+              <RemainText>{`👤 ${
+                user?.name ? user?.name : '사용자'
+              }님이 보유한 티켓은`}</RemainText>
             </TextBox>
           </BoxSub>
           <BoxMain>
@@ -128,7 +136,9 @@ export default function Home(): JSX.Element {
 
         <Box>
           <BoxHeader>
-            <BoxTitle>📍 리셋된 티켓은 토큰으로 데이터에 저장해 놓을게요</BoxTitle>
+            <BoxTitle>
+              📍 리셋된 티켓은 토큰으로 데이터에 저장해 놓을게요
+            </BoxTitle>
           </BoxHeader>
           <BoxSub>
             <TextBox>

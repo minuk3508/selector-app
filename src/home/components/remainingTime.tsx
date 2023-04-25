@@ -1,41 +1,10 @@
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
+import useRemainingTime from '../../states/stateHooks/useRemainingTime';
 
 export default function RemainingTime() {
-  const [hours, setHours] = useState<string>();
-  const [min, setMin] = useState<string>();
-  const [sec, setSec] = useState<string>();
-
-  const updateRemainingTime = () => {
-    const now = moment();
-    const tomorrow = moment().add(1, 'day').startOf('day').add(21, 'hours');
-    const today = moment().startOf('day').add(21, 'hours');
-    const tomorrowDiff = moment.duration(tomorrow.diff(now));
-    const todayDiff = moment.duration(today.diff(now));
-    if (tomorrowDiff.asHours() < 24) {
-      const hours = Math.floor(tomorrowDiff.asHours()).toString().padStart(2, '0');
-      const minutes = tomorrowDiff.minutes().toString().padStart(2, '0');
-      setHours(hours);
-      setMin(minutes);
-    } else {
-      const hours = Math.floor(todayDiff.asHours()).toString().padStart(2, '0');
-      const minutes = todayDiff.minutes().toString().padStart(2, '0');
-      const sec = todayDiff.seconds().toString().padStart(2, '0');
-      setSec(sec);
-      setHours(hours);
-      setMin(minutes);
-    }
-  };
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      updateRemainingTime();
-    }, 1000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+  const {hours, min, sec} = useRemainingTime();
 
   return (
     <Box>
