@@ -1,55 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import auth from '@react-native-firebase/auth';
-import {Platform, StatusBar, StyleSheet} from 'react-native';
-import styled from 'styled-components/native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import RemainingTime from './components/remainingTime';
-import Icon from 'react-native-vector-icons/Ionicons';
-import {addUser, getUser} from '../api/user';
+import React, { useEffect, useState } from "react";
+import auth from "@react-native-firebase/auth";
+import { Platform, StatusBar, StyleSheet } from "react-native";
+import styled from "styled-components/native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import RemainingTime from "./components/remainingTime";
+import Icon from "react-native-vector-icons/Ionicons";
+import { CustomUser, userAtom } from "../states/atoms/user.atom";
+import { useRecoilState } from "recoil";
 
-export default function Home(): JSX.Element {
+export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Element {
+  const [user, setUser] = useRecoilState<CustomUser>(userAtom);
   const [onSetting, setOnSetting] = useState(false);
 
-  const [user, setUser] = useState<{
-    uid: string;
-    name: string | null;
-    birth: string | null;
-    email: string | null;
-    phone: string | null;
-    account: object | null;
-  }>();
-
-  const init = async () => {
-    const currentUser = auth().currentUser?.uid;
-    const currentUserName = auth().currentUser?.displayName;
-    const currentUserEmail = auth().currentUser?.email;
-    if (currentUser) {
-      const user = await getUser({uid: currentUser});
-      if (user === '') {
-        await addUser({
-          uid: currentUser,
-          name: currentUserName ? currentUserName : null,
-          birth: null,
-          email: currentUserEmail ? currentUserEmail : null,
-          phone: null,
-          account: null,
-        }).then(() => {
-          const newUser = getUser({uid: currentUser});
-          console.log(newUser);
-        });
-      }
-      setUser(user);
-    }
-  };
-
   useEffect(() => {
-    init().then(() => console.log('-----> home mounting'));
-    return;
-  }, []);
+    setUser(userInfo);
+  }, [userInfo, setUser]);
 
   return (
     <Container>
-      <StatusBar barStyle={'light-content'} />
+      <StatusBar barStyle={"light-content"} />
       <HeaderWrapper>
         <TitleBox>
           <TitleText>Selector</TitleText>
@@ -59,7 +28,7 @@ export default function Home(): JSX.Element {
             onPress={() => {
               setOnSetting(prev => !prev);
             }}>
-            <Icon name="settings-sharp" color={'#5f5f5f'} size={23} />
+            <Icon name="settings-sharp" color={"#5f5f5f"} size={23} />
           </SettingButton>
           {onSetting ? (
             <Menu style={boxShdowStyles.shadow}>
@@ -95,9 +64,7 @@ export default function Home(): JSX.Element {
         </Box>
         <Box>
           <BoxHeader>
-            <BoxTitle>
-              📍 티켓이 뽑히면 그날 발행된 티켓은 리셋🔄됩니다.{' '}
-            </BoxTitle>
+            <BoxTitle>📍 티켓이 뽑히면 그날 발행된 티켓은 리셋🔄됩니다.</BoxTitle>
           </BoxHeader>
           <BoxSub>
             <TextBox>
@@ -112,7 +79,7 @@ export default function Home(): JSX.Element {
           <BoxSub>
             <TextBox>
               <RemainText>{`👤 ${
-                user?.name ? user?.name : '사용자'
+                user.name ? user.name : "사용자"
               }님이 보유한 티켓은`}</RemainText>
             </TextBox>
           </BoxSub>
@@ -133,12 +100,9 @@ export default function Home(): JSX.Element {
             </TextBox>
           </BoxSub>
         </Box>
-
         <Box>
           <BoxHeader>
-            <BoxTitle>
-              📍 리셋된 티켓은 토큰으로 데이터에 저장해 놓을게요
-            </BoxTitle>
+            <BoxTitle>📍 리셋된 티켓은 토큰으로 데이터에 저장해 놓을게요</BoxTitle>
           </BoxHeader>
           <BoxSub>
             <TextBox>
@@ -162,7 +126,7 @@ const boxShdowStyles = StyleSheet.create({
   shadow: {
     ...Platform.select({
       ios: {
-        shadowColor: '#000',
+        shadowColor: "#000",
         shadowOffset: {
           width: 10,
           height: 10,

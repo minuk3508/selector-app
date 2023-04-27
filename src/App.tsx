@@ -1,27 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import AuthScreen from './auth/auth.screen';
-import auth from '@react-native-firebase/auth';
-import Home from './home/home.screen';
-import {RecoilRoot} from 'recoil';
+import React, { useEffect, useState } from "react";
+import { RecoilRoot } from "recoil";
+import AuthScreen from "./auth/auth.screen";
+import Home from "./home/home.screen";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import useInitialUserInfo from "./states/stateHooks/useInitialUserInfo";
 
 export default function App(): JSX.Element | null {
   const [initializing, setInitializing] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState();
+  const { userInfo, userInfoSet } = useInitialUserInfo();
 
-  function onAuthStateChanged(user: any) {
-    setIsAuthenticated(user);
+  const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
+    userInfoSet(user);
     if (initializing) setInitializing(false);
-  }
+  };
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   }, []);
 
-  //파이어베이스 연결하는 동안 랜더링 방지를 위해 초기화 상태 유지
-  //initializing === false => 초기화 종료 => 화면 랜더링
   return (
     <RecoilRoot>
-      {initializing ? null : !isAuthenticated ? <AuthScreen /> : <Home />}
+      {initializing ? null : !userInfo ? <AuthScreen /> : <Home userInfo={userInfo} />}
     </RecoilRoot>
   );
 }
