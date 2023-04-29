@@ -18,16 +18,19 @@ const useInitialUserInfo = () => {
           account: null,
         }).then(async () => {
           await getUser({ uid: user.uid }).then(res => {
+            console.log(res);
             setUserInfo(res);
           });
         });
       } else {
+        console.log(getUserInfo);
         setUserInfo(getUserInfo);
       }
     } else {
       setUserInfo(null);
     }
   };
+
   return { userInfo, userInfoSet };
 };
 

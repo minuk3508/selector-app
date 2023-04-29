@@ -7,13 +7,25 @@ import RemainingTime from "./components/remainingTime";
 import Icon from "react-native-vector-icons/Ionicons";
 import { CustomUser, userAtom } from "../states/atoms/user.atom";
 import { useRecoilState } from "recoil";
+import { Availability, getAds, totalTicket } from "../api/ticket";
+import { useNavigation } from "@react-navigation/native";
+import { CustomAd, adAtom } from "../states/atoms/ads.atom";
 
 export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Element {
   const [user, setUser] = useRecoilState<CustomUser>(userAtom);
+  const [ad, setAd] = useRecoilState<CustomAd>(adAtom);
   const [onSetting, setOnSetting] = useState(false);
-
+  const [total, setTotal] = useState({ total: 0, total_currentUser: 0 });
+  const navigation = useNavigation();
+  const returnTotalTicket = async () => {
+    if (user.uid) {
+      const totals = await totalTicket({ userUid: user.uid });
+      setTotal(totals);
+    }
+  };
   useEffect(() => {
     setUser(userInfo);
+    returnTotalTicket();
   }, [userInfo, setUser]);
 
   return (
@@ -73,7 +85,7 @@ export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Elemen
           </BoxSub>
           <BoxMain>
             <HourBox>
-              <TimeText>0장</TimeText>
+              <TimeText>{total.total}장</TimeText>
             </HourBox>
           </BoxMain>
           <BoxSub>
@@ -85,7 +97,7 @@ export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Elemen
           </BoxSub>
           <BoxMain>
             <HourBox>
-              <TimeText>0장</TimeText>
+              <TimeText>{total.total_currentUser}장</TimeText>
             </HourBox>
           </BoxMain>
           <BoxSub>
@@ -114,7 +126,21 @@ export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Elemen
       </MainWrapper>
       <FooterWrapper>
         <TicketButtonWrapper>
-          <GetTicketButton>
+          <GetTicketButton
+            onPress={async () => {
+              const isAvailability = await Availability();
+
+              if (isAvailability && user.uid) {
+                await getAds({ userUid: user.uid })
+                  .then(res => {
+                    setAd({ contents: res });
+                    console.log(res);
+                  })
+                  .then(() => {
+                    navigation.navigate("Ads" as never);
+                  });
+              }
+            }}>
             <ButtonText>티켓 생성하기</ButtonText>
           </GetTicketButton>
         </TicketButtonWrapper>
