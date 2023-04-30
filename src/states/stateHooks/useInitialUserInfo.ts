@@ -7,24 +7,13 @@ const useInitialUserInfo = () => {
   const [userInfo, setUserInfo] = useState<CustomUser | null>();
   const userInfoSet = async (user: FirebaseAuthTypes.User | null) => {
     if (user) {
-      const getUserInfo = await getUser({ uid: user.uid });
-      if (getUserInfo === "") {
-        await addUser({
-          uid: user.uid,
-          name: user.displayName ? user.displayName : null,
-          birth: null,
-          email: user.email ? user.email : null,
-          phone: null,
-          account: null,
-        }).then(async () => {
-          await getUser({ uid: user.uid }).then(res => {
-            console.log(res);
-            setUserInfo(res);
-          });
-        });
-      } else {
+      const getUserInfo = await getUser({ uid: user.uid, name: user.displayName });
+      if (getUserInfo) {
         console.log(getUserInfo);
         setUserInfo(getUserInfo);
+      } else {
+        console.log(getUserInfo);
+        setUserInfo(null);
       }
     } else {
       setUserInfo(null);

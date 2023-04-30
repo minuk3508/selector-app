@@ -5,35 +5,35 @@ import styled from "styled-components/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import RemainingTime from "./components/remainingTime";
 import Icon from "react-native-vector-icons/Ionicons";
+import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { CustomUser, userAtom } from "../states/atoms/user.atom";
 import { useRecoilState } from "recoil";
-import { Availability, getAds, totalTicket } from "../api/ticket";
+import { Availability, getAds } from "../api/ticket";
 import { useNavigation } from "@react-navigation/native";
 import { CustomAd, adAtom } from "../states/atoms/ads.atom";
+import { TotalTicket } from "../states/stateHooks/useInitialTotalTickets";
+type HomeProps = {
+  userInfo: CustomUser;
+  totalTickets: TotalTicket;
+};
 
-export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Element {
+export default function Home(props: HomeProps): JSX.Element {
   const [user, setUser] = useRecoilState<CustomUser>(userAtom);
   const [ad, setAd] = useRecoilState<CustomAd>(adAtom);
   const [onSetting, setOnSetting] = useState(false);
-  const [total, setTotal] = useState({ total: 0, total_currentUser: 0 });
   const navigation = useNavigation();
-  const returnTotalTicket = async () => {
-    if (user.uid) {
-      const totals = await totalTicket({ userUid: user.uid });
-      setTotal(totals);
-    }
-  };
+
   useEffect(() => {
-    setUser(userInfo);
-    returnTotalTicket();
-  }, [userInfo, setUser]);
+    setUser(props.userInfo);
+  }, [props.userInfo, setUser]);
 
   return (
     <Container>
       <StatusBar barStyle={"light-content"} />
       <HeaderWrapper>
         <TitleBox>
-          <TitleText>Selector</TitleText>
+          <TitleText>Ticketty</TitleText>
+          <IconFontAwesome5 name="comment-dollar" color={"#5f5f5f"} size={23} />
         </TitleBox>
         <ButtonWrapper>
           <SettingButton
@@ -44,6 +44,14 @@ export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Elemen
           </SettingButton>
           {onSetting ? (
             <Menu style={boxShdowStyles.shadow}>
+              <MenuItem>
+                <MenuButton
+                  onPress={() => {
+                    navigation.navigate("My" as never);
+                  }}>
+                  <MenuButtonText>마이페이지</MenuButtonText>
+                </MenuButton>
+              </MenuItem>
               <MenuItem>
                 <MenuButton
                   onPress={() => {
@@ -73,6 +81,17 @@ export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Elemen
               <RemainText>입니다</RemainText>
             </TextBox>
           </BoxMain>
+          {user.account === null ? (
+            <BoxHeader>
+              <BoxTitle>📍 계좌를 알아야 당첨금을 줄 수 있어요</BoxTitle>
+            </BoxHeader>
+          ) : null}
+          <AccountResister
+            onPress={() => {
+              navigation.navigate("My" as never);
+            }}>
+            <BlackText>계좌 등록하기</BlackText>
+          </AccountResister>
         </Box>
         <Box>
           <BoxHeader>
@@ -85,7 +104,7 @@ export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Elemen
           </BoxSub>
           <BoxMain>
             <HourBox>
-              <TimeText>{total.total}장</TimeText>
+              <TimeText>{props.totalTickets.total}장</TimeText>
             </HourBox>
           </BoxMain>
           <BoxSub>
@@ -97,15 +116,22 @@ export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Elemen
           </BoxSub>
           <BoxMain>
             <HourBox>
-              <TimeText>{total.total_currentUser}장</TimeText>
+              <TimeText>{props.totalTickets.total_currentUser}장</TimeText>
             </HourBox>
           </BoxMain>
           <BoxSub>
             <TextBox>
-              <RemainText>그래서 당첨 확률은 약 </RemainText>
+              <RemainText>당첨 확률은 약 </RemainText>
             </TextBox>
             <HourBox>
-              <TimeText>0%</TimeText>
+              <TimeText>
+                {props.totalTickets.total_currentUser === 0
+                  ? "0%"
+                  : `${(
+                      (props.totalTickets.total_currentUser / props.totalTickets.total) *
+                      100
+                    ).toFixed(2)}%`}
+              </TimeText>
             </HourBox>
             <TextBox>
               <RemainText>가 되겠네요</RemainText>
@@ -148,11 +174,20 @@ export default function Home({ userInfo }: { userInfo: CustomUser }): JSX.Elemen
     </Container>
   );
 }
+const AccountResister = styled.TouchableOpacity`
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  margin-top: 10px;
+  border-radius: 10px;
+`;
 const boxShdowStyles = StyleSheet.create({
   shadow: {
     ...Platform.select({
       ios: {
-        shadowColor: "#000",
+        shadowColor: "#000000",
         shadowOffset: {
           width: 10,
           height: 10,
@@ -186,7 +221,7 @@ const Menu = styled.View`
   position: absolute;
   top: 100%;
   right: 0px;
-  width: 200px;
+  width: 100px;
   height: auto;
   padding: 10px 20px;
   background-color: #2d2c34;
@@ -204,9 +239,9 @@ const SettingButton = styled.TouchableOpacity`
   width: 30px;
   height: 30px;
   border-radius: 15px;
-  background-color: #252525;
 `;
 const TitleBox = styled.View`
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   width: auto;
@@ -217,6 +252,7 @@ const TitleText = styled.Text`
   font-weight: 900;
   font-size: 23px;
   margin-bottom: 1px;
+  padding-right: 5px;
 `;
 const Empty = styled.View`
   width: 100%;
@@ -259,6 +295,7 @@ const HeaderWrapper = styled.View`
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 3px;
+
   z-index: 3;
 `;
 const MainWrapper = styled.ScrollView`
@@ -293,6 +330,7 @@ const BoxMain = styled.View`
   width: 100%;
   height: auto;
   padding-left: 20px;
+  margin-bottom: 40px;
 `;
 const BoxSub = styled.View`
   display: flex;
@@ -327,6 +365,11 @@ const TextBox = styled.View`
 `;
 const RemainText = styled.Text`
   color: #ffffff;
+  font-weight: 900;
+  font-size: 15px;
+`;
+const BlackText = styled.Text`
+  color: #2d2c34;
   font-weight: 900;
   font-size: 15px;
 `;

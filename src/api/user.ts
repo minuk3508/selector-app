@@ -1,7 +1,7 @@
-import api from '../api';
+import api from "../api";
 
-export const getUser = async (body: {uid: string}) => {
-  const res = await api.post('/getUser', body);
+export const getUser = async (body: { uid: string; name: string | null }) => {
+  const res = await api.post("/getUser", body);
   return res;
 };
 
@@ -13,6 +13,6 @@ export const addUser = async (body: {
   phone: string | null;
   account: object | null;
 }) => {
-  const res = await api.post('/addUser', body);
+  const res = await api.post("/addUser", body);
   return res;
 };
