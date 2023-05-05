@@ -1,27 +1,43 @@
-import moment from 'moment';
-import React, {useEffect, useState} from 'react';
-import styled from 'styled-components/native';
-import useRemainingTime from '../../states/stateHooks/useRemainingTime';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components/native";
+import useRemainingTime from "../../states/stateHooks/useRemainingTime";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 export default function RemainingTime() {
-  const {hours, min, sec} = useRemainingTime();
+  const { hours, min, sec } = useRemainingTime();
 
   return (
     <Box>
       <BoxHeader>
-        <BoxTitle>📍 매일 밤 9️⃣시, 1장의 티켓을 뽑습니다 </BoxTitle>
+        <BoxTitle>
+          {Number(hours) > 22
+            ? `📍 추첨 중에 있어요 ${min ? min : "00"}분 ${
+                sec ? sec : "00"
+              }초 후에 만나요~`
+            : "📍 매일 밤 9️⃣시, 1장의 티켓을 뽑습니다"}
+        </BoxTitle>
       </BoxHeader>
       <BoxMain>
-        <HourBox>
-          <TimeText>
-            {hours === '00'
-              ? `⏰ ${min ? min : '00'}분 ${sec ? sec : '00'}초`
-              : `⏰ ${hours ? hours : '00'}시간 ${min ? min : '00'}분`}
-          </TimeText>
-        </HourBox>
-        <TextBox>
-          <RemainText>남았어요</RemainText>
-        </TextBox>
+        {Number(hours) > 22 ? (
+          <>
+            <VoteBox>
+              <Icon name="how-to-vote" size={50} color={"#69ff78"} />
+            </VoteBox>
+          </>
+        ) : (
+          <>
+            <HourBox>
+              <TimeText>
+                {hours === "00"
+                  ? `⏰ ${min ? min : "00"}분 ${sec ? sec : "00"}초`
+                  : `⏰ ${hours ? hours : "00"}시간 ${min ? min : "00"}분`}
+              </TimeText>
+            </HourBox>
+            <TextBox>
+              <RemainText>남았어요</RemainText>
+            </TextBox>
+          </>
+        )}
       </BoxMain>
     </Box>
   );
@@ -58,8 +74,21 @@ const HourBox = styled.View`
   height: auto;
   margin-right: 10px;
 `;
+const VoteBox = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  margin-right: 10px;
+`;
 
 const TimeText = styled.Text`
+  color: white;
+  font-weight: 900;
+  font-size: 27px;
+`;
+const VoteText = styled.Text`
   color: white;
   font-weight: 900;
   font-size: 27px;
