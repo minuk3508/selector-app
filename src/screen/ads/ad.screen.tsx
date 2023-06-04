@@ -3,12 +3,12 @@ import { ActivityIndicator, StatusBar } from "react-native";
 import styled from "styled-components/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Icon from "react-native-vector-icons/AntDesign";
-import { CustomUser, userAtom } from "../states/atoms/user.atom";
+import { CustomUser, userAtom } from "../../states/atoms/user.atom";
 import { useRecoilState } from "recoil";
-import { stampUser } from "../api/ticket";
+import { stampUser } from "../../api/ticket";
 import { useNavigation } from "@react-navigation/native";
-import useUpdateTotalTickets from "../states/stateHooks/useUpdateTotalTickets";
-import Loading from "../utils/loading";
+import useUpdateTotalTickets from "../../states/stateHooks/useUpdateTotalTickets";
+import Loading from "../../utils/loading";
 
 export default function Ads(): JSX.Element {
   const [user] = useRecoilState<CustomUser>(userAtom);

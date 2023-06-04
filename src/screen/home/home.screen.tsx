@@ -7,16 +7,16 @@ import RemainingTime from "./components/remainingTime";
 import Icon from "react-native-vector-icons/Ionicons";
 import Zzz from "react-native-vector-icons/MaterialCommunityIcons";
 import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { CustomUser, userAtom } from "../states/atoms/user.atom";
+import { CustomUser, userAtom } from "../../states/atoms/user.atom";
 import { useRecoilState } from "recoil";
-import { Availability, getAds } from "../api/ticket";
+import { Availability, getAds } from "../../api/ticket";
 import { useNavigation } from "@react-navigation/native";
-import { CustomAd, adAtom } from "../states/atoms/ads.atom";
-import { TotalTicket } from "../states/stateHooks/useInitialTotalTickets";
-import useRemainingTime from "../states/stateHooks/useRemainingTime";
-import { totalTicketAtom } from "../states/atoms/ticket.atom";
-import Loading from "../utils/loading";
-type HomeProps = {
+import { CustomAd, adAtom } from "../../states/atoms/ads.atom";
+import { TotalTicket } from "../../states/stateHooks/useInitialTotalTickets";
+import useRemainingTime from "../../states/stateHooks/useRemainingTime";
+import { totalTicketAtom } from "../../states/atoms/ticket.atom";
+import Loading from "../../utils/loading";
+export type HomeProps = {
   userInfo: CustomUser;
   totalTickets: TotalTicket;
 };
@@ -179,7 +179,7 @@ export default function Home(props: HomeProps): JSX.Element {
                       })
                       .then(() => {
                         setLoading(false);
-                        navigation.navigate("Ads" as never);
+                        navigation.navigate("ads" as never);
                       });
                   }
                 }}>
@@ -334,8 +334,10 @@ const Box = styled.View`
   height: auto;
   margin-bottom: 35px;
   padding: 20px;
-  background-color: #2d2c34;
-  border-radius: 8px;
+  background-color: #ffffff;
+
+  border: 4px solid #3a3a3a;
+  /* border-style: ; */
 `;
 const BoxHeader = styled.View`
   width: 100%;
@@ -360,7 +362,7 @@ const BoxSub = styled.View`
   margin-top: 10px;
 `;
 const BoxTitle = styled.Text`
-  color: white;
+  color: #3a3a3a;
   font-size: 14px;
   font-weight: 900;
 `;
@@ -372,7 +374,7 @@ const HourBox = styled.View`
 `;
 
 const TimeText = styled.Text`
-  color: white;
+  color: #3a3a3a;
   font-weight: 900;
   font-size: 27px;
 `;

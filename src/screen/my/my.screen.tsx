@@ -10,10 +10,10 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import { CustomUser, userAtom } from "../states/atoms/user.atom";
+import { CustomUser, userAtom } from "../../states/atoms/user.atom";
 import { useRecoilState } from "recoil";
-import { Availability, stampUser } from "../api/ticket";
-import { CustomAd, adAtom } from "../states/atoms/ads.atom";
+import { Availability, stampUser } from "../../api/ticket";
+import { CustomAd, adAtom } from "../../states/atoms/ads.atom";
 import { useNavigation } from "@react-navigation/native";
 import IconFontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Icon from "react-native-vector-icons/Ionicons";

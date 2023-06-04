@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
-import styled from 'styled-components/native';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {StatusBar} from 'react-native';
+import React, { useEffect } from "react";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import auth from "@react-native-firebase/auth";
+import styled from "styled-components/native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import Icon from "react-native-vector-icons/AntDesign";
+import { StatusBar } from "react-native";
 
 const WEBCLIENT_ID =
   `1054375956199-ppe58unqgn5pbrnoc9uk8a09hv8oj62a.apps.googleusercontent.com` as const;
@@ -18,13 +18,13 @@ export default function AuthScreen(): JSX.Element {
   }, []);
 
   const onGoogleButtonPress = async () => {
-    const {idToken} = await GoogleSignin.signIn();
+    const { idToken } = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     return auth().signInWithCredential(googleCredential);
   };
   return (
     <Container>
-      <StatusBar barStyle={'light-content'} />
+      <StatusBar barStyle={"light-content"} />
       <TopWrapper>
         <TitleBox>
           <TitleText>Selector</TitleText>
@@ -35,13 +35,13 @@ export default function AuthScreen(): JSX.Element {
           underlayColor="#fca2a2"
           onPress={() =>
             onGoogleButtonPress()
-              .then(() => console.log('Signed in with Google!'))
+              .then(() => console.log("Signed in with Google!"))
               .catch(err => console.log(err))
           }>
           <ButtonWrapper>
             <IconBox>
               <IconText>
-                <Icon name="googleplus" color={'white'} size={20} />
+                <Icon name="googleplus" color={"white"} size={20} />
               </IconText>
             </IconBox>
             <TextBox>

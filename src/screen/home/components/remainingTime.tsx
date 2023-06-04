@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import useRemainingTime from "../../states/stateHooks/useRemainingTime";
+import useRemainingTime from "../../../states/stateHooks/useRemainingTime";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 export default function RemainingTime() {
