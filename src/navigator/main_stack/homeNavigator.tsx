@@ -12,7 +12,7 @@ const HomeNavigator = ({ userInfo, totalTickets }: HomeProps) => {
         headerShown: false,
         tabBarStyle: {
           position: "absolute",
-          backgroundColor: "#3e3e3e",
+          backgroundColor: "#2d2c34",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
         },

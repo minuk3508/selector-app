@@ -12,9 +12,11 @@ export default function App(): JSX.Element | null {
   const { total, totalTicketSet } = useInitialTotalTickets();
 
   const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
-    userInfoSet(user);
-    totalTicketSet(user);
-    if (initializing) setInitializing(false);
+    if (initializing && user) {
+      setInitializing(false);
+      userInfoSet(user);
+      totalTicketSet(user.uid);
+    }
   };
 
   useEffect(() => {

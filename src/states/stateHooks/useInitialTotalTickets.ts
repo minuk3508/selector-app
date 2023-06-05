@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { totalTicket } from "../../api/ticket";
 export interface TotalTicket {
   total: number;
@@ -8,9 +7,9 @@ export interface TotalTicket {
 
 const useInitialTotalTickets = () => {
   const [total, setTotal] = useState<TotalTicket>({ total: 0, total_currentUser: 0 });
-  const totalTicketSet = async (user: FirebaseAuthTypes.User | null) => {
-    if (user) {
-      const totals = await totalTicket({ userUid: user.uid });
+  const totalTicketSet = async (userUid: string | null) => {
+    if (userUid) {
+      const totals = await totalTicket({ userUid });
       setTotal(totals);
     } else {
       setTotal({ total: 0, total_currentUser: 0 });

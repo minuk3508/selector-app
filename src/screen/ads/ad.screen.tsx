@@ -8,7 +8,7 @@ import { useRecoilState } from "recoil";
 import { stampUser } from "../../api/ticket";
 import { useNavigation } from "@react-navigation/native";
 import useUpdateTotalTickets from "../../states/stateHooks/useUpdateTotalTickets";
-import Loading from "../../utils/loading";
+import Loading from "../../components/Loading";
 
 export default function Ads(): JSX.Element {
   const [user] = useRecoilState<CustomUser>(userAtom);
@@ -69,7 +69,7 @@ export default function Ads(): JSX.Element {
           </>
         )}
       </Container>
-      {loading ? <Loading /> : null}
+      <Loading open={loading} />
     </>
   );
 }
