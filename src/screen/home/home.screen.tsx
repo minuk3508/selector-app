@@ -46,7 +46,7 @@ export default function Home(props: HomeProps): JSX.Element {
           : `${((totals.total_currentUser / totals.total) * 100).toFixed(2)}%`,
     },
   ];
-
+  console.log(props.userInfo);
   const renderItem = ({ item, index }: { item: any; index: number }) => {
     return (
       <ItemWrapper key={`${item.id}`}>
@@ -58,6 +58,9 @@ export default function Home(props: HomeProps): JSX.Element {
   return (
     <>
       <TabView>
+        <Title>
+          <TitleText>티켓 대시보드</TitleText>
+        </Title>
         <Wrapper>
           <RemainingTime />
           <Winnings />
@@ -78,7 +81,16 @@ export default function Home(props: HomeProps): JSX.Element {
     </>
   );
 }
-
+const Title = styled.View`
+  margin-top: ${wp(20)}px;
+  margin-left: ${wp(20)}px;
+  margin-right: ${wp(20)}px;
+`;
+const TitleText = styled.Text`
+  color: #929292;
+  font-size: ${wp(25)}px;
+  font-weight: 900;
+`;
 const Wrapper = styled.View`
   justify-content: center;
   padding-top: ${wp(20)}px;

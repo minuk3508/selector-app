@@ -12,10 +12,10 @@ export default function App(): JSX.Element | null {
   const { total, totalTicketSet } = useInitialTotalTickets();
 
   const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
-    if (initializing && user) {
+    userInfoSet(user);
+    totalTicketSet(user);
+    if (initializing) {
       setInitializing(false);
-      userInfoSet(user);
-      totalTicketSet(user.uid);
     }
   };
 
@@ -23,7 +23,7 @@ export default function App(): JSX.Element | null {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   }, []);
-
+  console.log(initializing);
   return (
     <RecoilRoot>
       {initializing ? null : !userInfo ? (

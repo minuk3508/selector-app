@@ -7,9 +7,9 @@ export interface TotalTicket {
 
 const useInitialTotalTickets = () => {
   const [total, setTotal] = useState<TotalTicket>({ total: 0, total_currentUser: 0 });
-  const totalTicketSet = async (userUid: string | null) => {
-    if (userUid) {
-      const totals = await totalTicket({ userUid });
+  const totalTicketSet = async (user: any) => {
+    if (user) {
+      const totals = await totalTicket({ userUid: user.uid });
       setTotal(totals);
     } else {
       setTotal({ total: 0, total_currentUser: 0 });
