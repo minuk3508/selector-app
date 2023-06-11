@@ -1,32 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { wp } from "../../../utils/ui";
-import { BankIcon } from "../../../components/Icons";
+import { BankIcon, BankLogoIcon } from "../../../components/Icons";
 import { useNavigation } from "@react-navigation/native";
 import { CustomUser, userAtom } from "../../../states/atoms/user.atom";
 import { useRecoilState } from "recoil";
+import { Bank, bankData } from "../../../data/banks";
 
 const Banks = () => {
   const navigation = useNavigation();
   const [user] = useRecoilState<CustomUser>(userAtom);
 
+  // useEffect(() => {
+  //   if (user.account !== null) {
+  //     const Bank = bankData.filter(i => i.code === user.account[0]);
+  //     setMyBank(Bank[2]);
+  //   }
+  // }, [user]);
+
   return (
     <>
       <Square>
         <IconBox>
-          <BankIcon />
+          {user?.account === null ? (
+            <BankIcon />
+          ) : (
+            <BankLogoIcon code={user?.account[0]} />
+          )}
         </IconBox>
         <ContentsBox>
           <Label>계좌번호</Label>
           {user?.account === null ? (
             <NoticeText>당첨금을 전달할 계좌가 필요해요</NoticeText>
           ) : (
-            <Contents>{`${user?.account}`}</Contents>
+            <Contents>{`${user?.account[1]}`}</Contents>
           )}
         </ContentsBox>
         <NavigationButton
           onPress={() => {
-            navigation.navigate("My" as never);
+            navigation.navigate("accounts" as never);
           }}>
           <ButtonLabel>{user?.account === null ? "등록" : "변경"}</ButtonLabel>
         </NavigationButton>

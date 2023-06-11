@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CustomUser } from "../atoms/user.atom";
-import { addUser, getUser } from "../../api/user";
+import { getUser } from "../../api/user";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 const useInitialUserInfo = () => {

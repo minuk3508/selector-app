@@ -6,7 +6,7 @@ export interface CustomUser {
   birth: string | null;
   email: string | null;
   phone: string | null;
-  account: object | null;
+  account: any[] | null;
 }
 
 export const userAtom = atom<CustomUser>({
