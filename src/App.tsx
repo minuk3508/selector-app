@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RecoilRoot } from "recoil";
 import AuthScreen from "./screen/auth/auth.screen";
-import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import auth, { FirebaseAuthTypes, firebase } from "@react-native-firebase/auth";
 import useInitialUserInfo from "./states/stateHooks/useInitialUserInfo";
 import useInitialTotalTickets from "./states/stateHooks/useInitialTotalTickets";
 import Root from "./navigator/root";
@@ -21,6 +21,7 @@ export default function App(): JSX.Element | null {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+
     return subscriber;
   }, []);
   console.log(initializing);

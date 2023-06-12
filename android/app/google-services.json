@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1054375956199",
+    "project_id": "selector-f5702",
+    "storage_bucket": "selector-f5702.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1054375956199:android:77dc1c67a2deb047a45c42",
+        "android_client_info": {
+          "package_name": "com.minuk.selector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1054375956199-ppe58unqgn5pbrnoc9uk8a09hv8oj62a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-ksPjXdN3VPBmizjeR5hON59WYkCnD4I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1054375956199-aj22u557b40ga1b9527ni0m7ea0f9js6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1054375956199-4cmo9hmgfe800nmkh55gifuqk92gj75l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "project.minuk.selector",
+                "app_store_id": "350800"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
