@@ -1,9 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { wp } from "../../../utils/ui";
 import { MoneyIcon } from "../../../components/Icons";
+import { GetWinnings } from "../../../api/winning";
+import { useRecoilState } from "recoil";
+import { winningsAtom } from "../../../states/atoms/winnings.atom";
 
 const Winnings = () => {
+  const [winning, setWinning] = useRecoilState(winningsAtom);
+
+  const renderWinnings = async () => {
+    const res = await GetWinnings();
+    if (res?.winings !== null || res?.winings === undefined) {
+      setWinning(10000 + res.winings);
+    }
+  };
+  console.log(winning);
+  const NumberToLocaleString = (coin: string | number) => {
+    let tempCoin = coin;
+    if (isNaN(Number(tempCoin))) {
+      return coin;
+    } else {
+      tempCoin = Number(coin);
+    }
+
+    return tempCoin.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+  useEffect(() => {
+    renderWinnings();
+  }, []);
   return (
     <Square>
       <IconBox>
@@ -11,7 +36,7 @@ const Winnings = () => {
       </IconBox>
       <ContentsBox>
         <Label>당첨금</Label>
-        <Contents>50,000원</Contents>
+        <Contents>{`${NumberToLocaleString(winning)}원`}</Contents>
       </ContentsBox>
     </Square>
   );

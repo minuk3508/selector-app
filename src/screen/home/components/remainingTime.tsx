@@ -4,7 +4,7 @@ import useRemainingTime from "../../../states/stateHooks/useRemainingTime";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { wp } from "../../../utils/ui";
 import { HourglassIcon } from "../../../components/Icons";
-
+import Zzz from "react-native-vector-icons/MaterialCommunityIcons";
 export default function RemainingTime() {
   const { hours, min, sec } = useRemainingTime();
 
@@ -14,48 +14,19 @@ export default function RemainingTime() {
         <HourglassIcon />
       </IconBox>
       <ContentsBox>
-        <Label>남은시간</Label>
-
-        <Contents>
-          {hours === "00"
-            ? `${min ? min : "00"}분 ${sec ? sec : "00"}초`
-            : `${hours ? hours : "00"}시간 ${min ? min : "00"}분`}
-        </Contents>
-      </ContentsBox>
-      {/* <BoxMain>
-        {Number(hours) > 22 ? (
-          <>
-            <VoteBox>
-              <Icon name="how-to-vote" size={50} color={"#69ff78"} />
-            </VoteBox>
-          </>
+        {hours === "23" ? (
+          <Zzz name="sleep" size={35} color={"#69ff78"} />
         ) : (
           <>
-            <HourBox>
-              <TimeText>
-                {hours === "00"
-                  ? `⏰ ${min ? min : "00"}분 ${sec ? sec : "00"}초`
-                  : `⏰ ${hours ? hours : "00"}시간 ${min ? min : "00"}분`}
-              </TimeText>
-            </HourBox>
-            <TextBox>
-              <RemainText>남았어요</RemainText>
-            </TextBox>
+            <Label>남은시간</Label>
+            <Contents>
+              {hours === "00"
+                ? `${min ? min : "00"}분 ${sec ? sec : "00"}초`
+                : `${hours ? hours : "00"}시간 ${min ? min : "00"}분`}
+            </Contents>
           </>
         )}
-      </BoxMain>
-      <BoxHeader>
-        <BoxTitle>
-          {Number(hours) > 22
-            ? `📍 추첨 중에 있어요 ${min ? min : "00"}분 ${
-                sec ? sec : "00"
-              }초 후에 만나요~`
-            : "📍 매일 밤 9️⃣시, 1장의 티켓을 뽑습니다"}
-        </BoxTitle>
-      </BoxHeader>
-      <BoxHeader>
-        <BoxTitle>📍 티켓이 뽑히면 그날 발행된 티켓은 리셋🔄됩니다.</BoxTitle>
-      </BoxHeader> */}
+      </ContentsBox>
     </Square>
   );
 }

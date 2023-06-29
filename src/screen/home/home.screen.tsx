@@ -21,7 +21,7 @@ export default function Home(props: HomeProps): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
   const [_, setUser] = useRecoilState<CustomUser>(userAtom);
   const [totals, setTotals] = useRecoilState<TotalTicket>(totalTicketAtom);
-
+  console.log("dddd");
   useEffect(() => {
     setUser(props.userInfo);
   }, [props.userInfo, setUser]);
@@ -31,22 +31,28 @@ export default function Home(props: HomeProps): JSX.Element {
   }, [props.totalTickets]);
 
   const ticketData = [
-    { id: "1", title: "전체 티켓 수", total: `${totals.total} 장` },
+    {
+      id: "1",
+      title: "전체 티켓 수",
+      total: totals.total ? `${totals.total} 장` : `0 장`,
+    },
     {
       id: "2",
       title: "나의 티켓 수",
-      total: `${totals.total_currentUser} 장`,
+      total: totals.total_currentUser ? `${totals.total_currentUser} 장` : `0 장`,
     },
     {
       id: "3",
       title: "당첨 확률",
       total:
-        totals.total_currentUser === 0
-          ? "0%"
-          : `${((totals.total_currentUser / totals.total) * 100).toFixed(2)}%`,
+        totals.total || totals.total_currentUser
+          ? totals.total_currentUser === 0
+            ? "0%"
+            : `${((totals.total_currentUser / totals.total) * 100).toFixed(2)}%`
+          : "0%",
     },
   ];
-  console.log(props.userInfo);
+
   const renderItem = ({ item, index }: { item: any; index: number }) => {
     return (
       <ItemWrapper key={`${item.id}`}>

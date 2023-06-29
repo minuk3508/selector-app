@@ -18,6 +18,7 @@ const GetTicketButton = ({
   const [user] = useRecoilState<CustomUser>(userAtom);
   const [_, setAd] = useRecoilState<CustomAd>(adAtom);
   const navigation = useNavigation();
+
   return (
     <Wrapper>
       {Number(hours) > 22 ? (

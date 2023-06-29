@@ -9,9 +9,13 @@ import { stampUser } from "../../api/ticket";
 import { useNavigation } from "@react-navigation/native";
 import useUpdateTotalTickets from "../../states/stateHooks/useUpdateTotalTickets";
 import Loading from "../../components/Loading";
+import { winningsAtom } from "../../states/atoms/winnings.atom";
+import { GetWinnings } from "../../api/winning";
 
 export default function Ads(): JSX.Element {
   const [user] = useRecoilState<CustomUser>(userAtom);
+  const [_, setWinning] = useRecoilState(winningsAtom);
+
   const [loading, setLoading] = useState(false);
   const { totalTicketSet } = useUpdateTotalTickets();
   const [showMessage, setShowMessage] = useState(false);
@@ -38,7 +42,12 @@ export default function Ads(): JSX.Element {
         navigate.goBack();
       });
     }
+    const res = await GetWinnings();
+    if (res?.winings !== null || res?.winings === undefined) {
+      setWinning(10000 + res.winings);
+    }
   };
+
   return (
     <>
       <Container>
