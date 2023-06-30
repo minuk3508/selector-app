@@ -42,9 +42,12 @@ export default function Ads(): JSX.Element {
         navigate.goBack();
       });
     }
+
     const res = await GetWinnings();
-    if (res?.winings !== null || res?.winings === undefined) {
+    if (typeof res?.winings === "number") {
       setWinning(10000 + res.winings);
+    } else {
+      return;
     }
   };
 

@@ -11,6 +11,8 @@ import Banks from "./components/banks";
 import { wp } from "../../utils/ui";
 import Loading from "../../components/Loading";
 import GetTicketButton from "./components/getTicketButton";
+import Swiper from "react-native-swiper";
+import Alarm from "./components/alarm";
 
 export type HomeProps = {
   userInfo: CustomUser;
@@ -52,7 +54,11 @@ export default function Home(props: HomeProps): JSX.Element {
           : "0%",
     },
   ];
-
+  const test = {
+    name: "김민욱",
+    winnings: 50000,
+    message: "와우 당첨됐당~^_^",
+  };
   const renderItem = ({ item, index }: { item: any; index: number }) => {
     return (
       <ItemWrapper key={`${item.id}`}>
@@ -61,12 +67,14 @@ export default function Home(props: HomeProps): JSX.Element {
       </ItemWrapper>
     );
   };
+
   return (
     <>
       <TabView>
         <Title>
           <TitleText>티켓 대시보드</TitleText>
         </Title>
+        <Alarm />
         <Wrapper>
           <RemainingTime />
           <Winnings />
@@ -104,9 +112,40 @@ const Wrapper = styled.View`
   margin-top: ${wp(20)}px;
   margin-left: ${wp(20)}px;
   margin-right: ${wp(20)}px;
-  margin-bottom: ${wp(30)}px;
+  margin-bottom: ${wp(20)}px;
   border-radius: ${wp(10)}px;
   background-color: #2d2c34;
+`;
+const Wrapper2 = styled.View`
+  justify-content: center;
+  padding-top: ${wp(10)}px;
+  padding-bottom: ${wp(10)}px;
+  padding-left: ${wp(20)}px;
+  margin-top: ${wp(20)}px;
+  margin-left: ${wp(20)}px;
+  margin-right: ${wp(20)}px;
+  border-radius: ${wp(10)}px;
+  background-color: #2d2c34;
+`;
+const Wrapper2Text = styled.Text`
+  color: #ffffff;
+  font-size: ${wp(13)}px;
+  font-weight: 900;
+`;
+const Wrapper2Title = styled.View`
+  margin-top: ${wp(20)}px;
+  margin-left: ${wp(20)}px;
+  margin-right: ${wp(20)}px;
+`;
+const HighlightText = styled.Text`
+  color: #69ff78;
+  font-size: ${wp(13)}px;
+  font-weight: 900;
+`;
+const Wrapper2TitleText = styled.Text`
+  color: #d1d1d1;
+  font-size: ${wp(17)}px;
+  font-weight: 900;
 `;
 const ItemWrapper = styled.View`
   justify-content: space-between;

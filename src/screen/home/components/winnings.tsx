@@ -11,8 +11,10 @@ const Winnings = () => {
 
   const renderWinnings = async () => {
     const res = await GetWinnings();
-    if (res?.winings !== null || res?.winings === undefined) {
+    if (typeof res?.winings === "number") {
       setWinning(10000 + res.winings);
+    } else {
+      return;
     }
   };
   console.log(winning);
@@ -28,7 +30,7 @@ const Winnings = () => {
   };
   useEffect(() => {
     renderWinnings();
-  }, []);
+  }, [winning]);
   return (
     <Square>
       <IconBox>
